@@ -45,8 +45,9 @@ the user ran every command.
 | Group A | npm, uv, pip and Homebrew caches; Xcode build output to the Trash | 36 GiB |
 | Group B | 4 unused local AI models, iOS simulators, old app leftovers to the Trash | 57 GiB |
 | Trash emptied by the user | | 84 GiB |
+| Orphan MLX models, an unused node_modules | | 92 GiB |
 
-`measure.sh after`: used 461.64 GB → 403.67 GB, **58 GB freed**, with nothing deleted by the agent.
+`measure.sh after`: used 461.64 GB → 395.52 GB, **66 GB freed**, with nothing deleted by the agent.
 
 ## How it is tested
 
