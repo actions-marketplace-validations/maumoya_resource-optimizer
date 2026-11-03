@@ -1,0 +1,17 @@
+{
+  "skill": "resource-optimizer",
+  "queries": [
+    { "text": "my disk is full, help me free up space", "trigger": true },
+    { "text": "what is using all my storage? Documents says 198 GB", "trigger": true },
+    { "text": "clean my Mac, it is slow and almost out of space", "trigger": true },
+    { "text": "which local AI models can I remove to get space back?", "trigger": true },
+    { "text": "why is my computer so slow lately, swap is huge", "trigger": true },
+    { "text": "clear my npm and brew caches safely", "trigger": true },
+    { "text": "limpiá mi compu que no tengo espacio", "trigger": true, "holdout": true },
+    { "text": "my laptop storage is maxed out what do i delete", "trigger": true, "holdout": true },
+    { "text": "delete the file report-old.pdf from this repo", "trigger": false },
+    { "text": "optimize this SQL query, it is slow", "trigger": false },
+    { "text": "write a Python function that frees memory in my cache class", "trigger": false },
+    { "text": "how much does a 2 TB SSD cost?", "trigger": false, "holdout": true }
+  ]
+}

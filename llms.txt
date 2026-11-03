@@ -1,0 +1,13 @@
+# Resource Optimizer
+
+> Frees disk space and eases RAM and CPU load on macOS and Linux: measures read-only, ranks what fills the disk with a plain need-it answer, gives you one command per group to run, proves the result before/after. Never deletes on its own.
+
+## Install
+
+- Claude Code: `/plugin marketplace add maumoya/resource-optimizer` then `/plugin install resource-optimizer@resource-optimizer`
+- Any agent: `npx skills add maumoya/resource-optimizer`
+
+## Files
+
+- [SKILL.md](https://github.com/maumoya/resource-optimizer/blob/main/skills/resource-optimizer/SKILL.md): the skill
+- [README.md](https://github.com/maumoya/resource-optimizer/blob/main/README.md): what it does and how to install it
