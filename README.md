@@ -34,6 +34,20 @@ npx skills add maumoya/resource-optimizer
 
 Type: `/resource-optimizer` or say "my disk is full".
 
+## Results
+
+First real run, a 16 GB Mac mini with a 494 GB disk (2026-11-03). Measured with `scripts/measure.sh` and `df -h /`;
+the user ran every command.
+
+| Step | What was cleared | Free space |
+|---|---|---|
+| Start | (macOS Storage showed 474.82 GB used) | 29 GiB |
+| Group A | npm, uv, pip and Homebrew caches; Xcode build output to the Trash | 36 GiB |
+| Group B | 4 unused local AI models, iOS simulators, old app leftovers to the Trash | 57 GiB |
+| Trash emptied by the user | | 84 GiB |
+
+`measure.sh after`: used 461.64 GB → 403.67 GB, **58 GB freed**, with nothing deleted by the agent.
+
 ## How it is tested
 
 `evals/` holds one case per promise. Run `claude plugin eval . --allow-tools`.
