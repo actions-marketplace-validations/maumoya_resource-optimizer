@@ -17,7 +17,8 @@ safely. You measure; the user deletes. Every run ends with a measured before/aft
    `uv cache prune`, `xcrun simctl delete unavailable`, `ollama rm NAME`). Personal files go to the Trash
    (`trash PATH` on macOS 15+, or Finder) or to an external disk, never `rm`. Space only comes back when the user
    empties the Trash; say so, and let them do it.
-3. **No sudo, no admin prompts.** If something needs admin rights, explain it and stop.
+3. **No sudo, never see a password.** When the OS asks for admin rights (apps owned by root), let macOS show its own
+   password dialog: the user types there, you never ask for, read or type the password.
 4. **Explicit paths only.** No wildcards over the home folder. One path per line in every command.
 5. **Hands off:** the OS, keychains and passwords, `~/.ssh`, `.env` and credential files, Photos and Mail libraries,
    cloud-synced folders, backup repositories, and any app's approval or audit records. Report their size; never touch them.
@@ -47,7 +48,13 @@ safely. You measure; the user deletes. Every run ends with a measured before/aft
    to run it. Read the result yourself (terminal or a re-measure); never ask them to paste output. Re-run
    `df -h /` after each group so the user sees each group's gain.
 6. **After.** Run `scripts/measure.sh after`. It prints the before/after table from the two saved snapshots.
-7. **Leftovers.** List at most 3 things only the user can do (buy a disk, change an app setting, reboot weekly).
+7. **Uninstall apps** the user named as unused, in this order, and check with `ls /Applications/NAME.app` after each:
+   (a) `trash PATH` for apps the user owns; (b) for root-owned App Store apps, Finder by code:
+   `osascript -e 'tell application "Finder" to delete {POSIX file "/Applications/NAME.app"}'` (macOS asks for the
+   password in its own dialog; items go to the Trash, so it can be undone); (c) if that is blocked, move the app to the
+   Trash in Finder with computer use, the user typing into the OS dialog. Never make the user drag files themselves.
+   Remind them that deleting a paid app does not cancel its plan.
+8. **Leftovers.** List at most 3 things only the user can do (buy a disk, change an app setting, reboot weekly).
 
 ## Done when
 

@@ -43,8 +43,9 @@ pushed repos. Package caches gave about 7 GiB. Start with the Trash size and the
 | Re-downloadable? | `kMDItemAppStoreHasReceipt = 1` means the App Store gives it back free |
 | Leftover data | `du -sh ~/Library/Containers/BUNDLE_ID` and `~/Library/Application Support/NAME`; GarageBand sounds in `/Library/Application Support/GarageBand` |
 
-Rank apps unused for 90+ days, largest first. Action: the app's own uninstaller if it has one, else Storage › Applications ›
-Delete (moves it out the official way). Data the app made (iMovie libraries, GarageBand projects) is user data: Group B,
+Rank apps unused for 90+ days, largest first. Action: the app's own uninstaller if it has one, else SKILL.md step 7
+(`trash`, then Finder by `osascript` for root-owned App Store apps, then computer use). `trash` fails with
+`afpAccessDenied` on root-owned apps; that is the cue for the Finder route. Data the app made (iMovie libraries, GarageBand projects) is user data: Group B,
 archive first. Paid apps: deleting the app does not cancel the plan; tell the user to cancel it in their account.
 Never offer system apps (Safari, Mail) or apps with a running login item or helper.
 
