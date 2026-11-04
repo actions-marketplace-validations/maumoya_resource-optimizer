@@ -1,12 +1,16 @@
-<!-- Header: create it with skill-forger-e2e's make_header.sh, then put its img tag here, centered, width 100%. -->
+<p align="center">
+  <img src="assets/header.png" alt="resource-optimizer, a free open source Claude Code skill that frees disk space safely: measures first, you approve each step, +86 GiB on a real Mac mini" width="100%">
+</p>
 
-<!-- Regenerate the row with badges.sh: it adds Scorecard, Best Practices and measured benefit badges when they exist. -->
 <p align="center">
   <img src="https://img.shields.io/badge/Claude%20Code-skill%20%2B%20plugin-7c5cfc" alt="Claude Code skill and plugin">
+  <a href="#results-measured-2026-11-03"><img src="https://img.shields.io/badge/free%20space-%2B86%20GiB-2da44e" alt="Free space: plus 86 GiB on a real Mac mini"></a>
+  <a href="#results-measured-2026-11-03"><img src="https://img.shields.io/badge/deleted%20by%20agent-0-2da44e" alt="Files deleted by the agent on its own: 0"></a>
   <img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT license">
   <a href="https://opensource.org/license/mit"><img src="https://img.shields.io/badge/Open%20Source-OSI%20approved%20license-3DA639?logo=opensourceinitiative&logoColor=white" alt="Open Source: OSI-approved MIT license"></a>
-  <img src="https://img.shields.io/badge/privacy-no%20tracking%20%C2%B7%20no%20data%20collected-7c5cfc" alt="Privacy: no tracking, no data collected">
+  <a href="PRIVACY.md"><img src="https://img.shields.io/badge/privacy-no%20tracking%20%C2%B7%20no%20data%20collected-7c5cfc" alt="Privacy: no tracking, no data collected"></a>
   <a href="https://scorecard.dev/viewer/?uri=github.com/maumoya/resource-optimizer"><img src="https://api.scorecard.dev/projects/github.com/maumoya/resource-optimizer/badge" alt="OpenSSF Scorecard"></a>
+  <!-- OpenSSF Best Practices: not registered; run bestpractices.sh maumoya/resource-optimizer -->
 </p>
 
 # Resource Optimizer
@@ -34,7 +38,7 @@ npx skills add maumoya/resource-optimizer
 
 Type: `/resource-optimizer` or say "my disk is full".
 
-## Results
+## Results (measured 2026-11-03)
 
 First real run, a 16 GB Mac mini with a 494 GB disk (2026-11-03). Measured with `scripts/measure.sh` and `df -h /`;
 the user ran every command.
@@ -49,7 +53,7 @@ the user ran every command.
 | Old iOS simulator runtimes (27.0, 27.1; 27.2 kept for builds) | 14.8 GB | 109 GiB |
 | 5 unused apps and 2 duplicate apps to the Trash, Trash emptied by the user | | 115 GiB |
 
-**+86 GiB free** (29 → 115 GiB), measured with `df -h /`. The agent deleted nothing on its own: every permanent step
+**+86 GiB free** (29 → 115 GiB), measured with `df -h /`. The agent deleted 0 files on its own: every permanent step
 was the user's command or the user's password in a macOS dialog.
 
 ## How it is tested
