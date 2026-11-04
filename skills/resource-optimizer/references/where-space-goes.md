@@ -35,6 +35,28 @@ Sizes vary. Measure each with `du -sh PATH`, one explicit path at a time.
 unused Ollama models (checked against code first), iOS simulators, models whose app was gone, and `node_modules` in
 pushed repos. Package caches gave about 7 GiB. Start with the Trash size and the model folders.
 
+## Unused apps
+
+| Check | How |
+|---|---|
+| Size and last use | System Settings › General › Storage › Applications (Last Accessed column), or `mdls -name kMDItemLastUsedDate -name kMDItemAppStoreHasReceipt /Applications/NAME.app` |
+| Re-downloadable? | `kMDItemAppStoreHasReceipt = 1` means the App Store gives it back free |
+| Leftover data | `du -sh ~/Library/Containers/BUNDLE_ID` and `~/Library/Application Support/NAME`; GarageBand sounds in `/Library/Application Support/GarageBand` |
+
+Rank apps unused for 90+ days, largest first. Action: the app's own uninstaller if it has one, else Storage › Applications ›
+Delete (moves it out the official way). Data the app made (iMovie libraries, GarageBand projects) is user data: Group B,
+archive first. Never offer system apps (Safari, Mail) or apps with a running login item or helper.
+
+## Why "System Data" is huge on macOS
+
+| Item | Check (read-only) | Action |
+|---|---|---|
+| Simulator runtimes (often 8 GB each) | `xcrun simctl runtime list -v` (size, last used) | keep the newest one in use; `xcrun simctl runtime delete ID` for the rest |
+| Temp and cache (`/private/var/folders`) | `du -sh "$(getconf DARWIN_USER_TEMP_DIR)"` | a restart clears most of it; never Trash it by hand while apps run |
+| Time Machine local snapshots | `tmutil listlocalsnapshots /` | macOS thins them when space is low |
+| App VM bundles (Claude, Docker) | `du -sh` on the app's support folder | keep while the app is used |
+| Purgeable space | `diskutil info /` Container Free Space | Settings counts it as used; it frees by itself |
+
 ## Group C: in an app's own settings
 
 Messages and WhatsApp attachments, iCloud "Optimize Mac Storage", photo libraries, mail downloads, a pending OS update.

@@ -34,7 +34,7 @@ safely. You measure; the user deletes. Every run ends with a measured before/aft
 1. **Before.** Run `scripts/measure.sh before --scan`. It saves used and free space (plus purgeable space and
    Time Machine local snapshots on macOS), RAM, swap, load and the 20 largest home folders to
    `~/.resource-optimizer/before.txt` and prints them. Then run the extra checks in `references/where-space-goes.md`
-   (Docker, node_modules, stale large files, Trash, login items) for whatever this machine has.
+   (Docker, node_modules, stale large files, Trash, login items, unused apps, System Data) for whatever this machine has.
 2. **Explain.** In up to 5 bullets: why space is short or why the machine is slow. Say plainly if the hardware is the limit
    (little RAM, nearly full disk).
 3. **Rank.** One table, largest first: `# | Item | Size | Need it? | Risk | Safe action`. "Need it?" is `yes`, `no` or
