@@ -11,7 +11,7 @@ Sizes vary. Measure each with `du -sh PATH`, one explicit path at a time.
 | uv cache | `~/.cache/uv` | `~/.cache/uv` | `uv cache prune` |
 | Homebrew | `~/Library/Caches/Homebrew` | `~/.cache/Homebrew` | `brew cleanup --prune=all` |
 | Playwright browsers | `~/Library/Caches/ms-playwright` | `~/.cache/ms-playwright` | `npx playwright uninstall --all` |
-| iOS simulators | `~/Library/Developer/CoreSimulator` | n/a | `xcrun simctl delete unavailable` |
+| iOS simulators | `~/Library/Developer/CoreSimulator` | n/a | `xcrun simctl delete unavailable` first; if that frees nothing, `xcrun simctl delete all` (Xcode re-downloads on demand) |
 | Xcode build output | `~/Library/Developer/Xcode/DerivedData` | n/a | Xcode › Settings › Locations › delete, or move the folder to the Trash |
 | Docker images | inside the VM disk | `/var/lib/docker` | `docker system prune` (shows what it removes first) |
 | Browser caches | `~/Library/Caches/Google`, `Firefox` | `~/.cache/google-chrome` | clear from the browser's settings with the browser closed |
@@ -28,6 +28,12 @@ Sizes vary. Measure each with `du -sh PATH`, one explicit path at a time.
 | Old app support folders | `~/Library/Application Support/APP` | is the app still installed and used | uninstall the app the official way, then Trash the folder |
 | `node_modules` in old projects | project folders | repo committed and pushed, not opened lately | Trash; `npm install` brings it back |
 | Downloads, Movies | `~/Downloads`, `~/Movies` | last opened date | Trash or external disk |
+
+## What freed the most in a real run
+
+16 GB Mac mini, 29 → 92 GiB free in four user-run rounds: emptying the Trash (+23 GiB, nothing is freed until then),
+unused Ollama models (checked against code first), iOS simulators, models whose app was gone, and `node_modules` in
+pushed repos. Package caches gave about 7 GiB. Start with the Trash size and the model folders.
 
 ## Group C: in an app's own settings
 
@@ -52,7 +58,7 @@ Name the search roots explicitly. Never `find ~` over the whole home on a large 
 ## Why "Documents" is huge on macOS
 
 System Settings › Storage shows "Documents" as every user file that fits no other category: models, VM disks, caches,
-app support folders, and hidden folders such as `~/.ollama`, `~/.colima` or an app's VM bundle. The `~/Documents`
+app support folders, and hidden folders such as `~/.ollama`, `~/.colima` or an app's VM bundle (`vm_bundles` under Application Support). The `~/Documents`
 folder itself is often tiny. Measure the home folder's top level, hidden folders included, and show the user those
 names instead of saying "Documents is heavy".
 
