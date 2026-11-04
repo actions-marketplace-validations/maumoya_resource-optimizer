@@ -33,7 +33,8 @@ Sizes vary. Measure each with `du -sh PATH`, one explicit path at a time.
 
 16 GB Mac mini, 29 → 92 GiB free in four user-run rounds: emptying the Trash (+23 GiB, nothing is freed until then),
 unused Ollama models (checked against code first), iOS simulators, models whose app was gone, and `node_modules` in
-pushed repos. Package caches gave about 7 GiB. Start with the Trash size and the model folders.
+pushed repos. Package caches gave about 7 GiB. A later round took it to 115 GiB: old simulator runtimes (14.8 GB) and
+unused or duplicate apps, then the Trash emptied again. Start with the Trash size, the model folders and simulator runtimes.
 
 ## Unused apps
 
@@ -47,6 +48,12 @@ Rank apps unused for 90+ days, largest first. Action: the app's own uninstaller 
 (`trash`, then Finder by `osascript` for root-owned App Store apps, then computer use). `trash` fails with
 `afpAccessDenied` on root-owned apps; that is the cue for the Finder route. Data the app made (iMovie libraries, GarageBand projects) is user data: Group B,
 archive first. Paid apps: deleting the app does not cancel the plan; tell the user to cancel it in their account.
+Duplicates: group `.app` bundles by `CFBundleIdentifier` (`mdfind "kMDItemContentType == com.apple.application-bundle"`,
+skip `/System`, paths inside `/Contents/`, the Trash and Developer folders). Same id twice = an old copy or a `-backup` app
+beside the current one; offer the older one. Ignore versioned bundles that an app manages itself (claude-code versions,
+GoogleUpdater).
+System Settings › Storage keeps a cached list: quit System Settings and reopen it on Storage
+(`open "x-apple.systempreferences:com.apple.settings.Storage"`) to see the change.
 Never offer system apps (Safari, Mail) or apps with a running login item or helper.
 
 ## Why "System Data" is huge on macOS

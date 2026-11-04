@@ -53,8 +53,11 @@ safely. You measure; the user deletes. Every run ends with a measured before/aft
    `osascript -e 'tell application "Finder" to delete {POSIX file "/Applications/NAME.app"}'` (macOS asks for the
    password in its own dialog; items go to the Trash, so it can be undone); (c) if that is blocked, move the app to the
    Trash in Finder with computer use, the user typing into the OS dialog. Never make the user drag files themselves.
+   If your own safety checks block a step, hand it over as one command block instead.
    Remind them that deleting a paid app does not cancel its plan.
-8. **Leftovers.** List at most 3 things only the user can do (buy a disk, change an app setting, reboot weekly).
+8. **Empty the Trash** only as the user's command block, never yourself: it is permanent.
+   `osascript -e 'tell application "Finder" to empty trash' && df -h /`. Trashed items count as used space until then.
+9. **Leftovers.** List at most 3 things only the user can do (buy a disk, change an app setting, reboot weekly).
 
 ## Done when
 

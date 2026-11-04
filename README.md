@@ -46,8 +46,11 @@ the user ran every command.
 | Group B | 4 unused local AI models, iOS simulators, old app leftovers to the Trash | 57 GiB |
 | Trash emptied by the user | | 84 GiB |
 | Orphan MLX models, an unused node_modules | | 92 GiB |
+| Old iOS simulator runtimes (27.0, 27.1; 27.2 kept for builds) | 14.8 GB | 109 GiB |
+| 5 unused apps and 2 duplicate apps to the Trash, Trash emptied by the user | | 115 GiB |
 
-`measure.sh after`: used 461.64 GB → 395.52 GB, **66 GB freed**, with nothing deleted by the agent.
+**+86 GiB free** (29 → 115 GiB), measured with `df -h /`. The agent deleted nothing on its own: every permanent step
+was the user's command or the user's password in a macOS dialog.
 
 ## How it is tested
 
