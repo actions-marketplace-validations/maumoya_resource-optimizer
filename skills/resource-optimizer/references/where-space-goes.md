@@ -23,10 +23,10 @@ Sizes vary. Measure each with `du -sh PATH`, one explicit path at a time.
 | Item | Where | How to check if it is used | Action |
 |---|---|---|---|
 | Ollama models | `~/.ollama/models` | `ollama list`, then search the user's code and config for each name | `ollama rm NAME`, one per line |
-| MLX / Hugging Face models | `~/MLXModels`, `~/.cache/huggingface` | which app loads them, last access date | move to an external disk |
+| MLX / Hugging Face models | `~/MLXModels`, `~/.cache/huggingface` | which app loads them; is that app still installed | app gone: Trash; else external disk |
 | VM disks (Colima, Docker Desktop, UTM) | `~/.colima`, `~/Library/Containers/com.docker.docker` | is the VM running, is it needed soon | stop it, then archive to an external disk |
 | Old app support folders | `~/Library/Application Support/APP` | is the app still installed and used | uninstall the app the official way, then Trash the folder |
-| Old git worktrees | project `worktrees/` folders | merged branch, no uncommitted changes | `git worktree remove PATH` |
+| `node_modules` in old projects | project folders | repo committed and pushed, not opened lately | Trash; `npm install` brings it back |
 | Downloads, Movies | `~/Downloads`, `~/Movies` | last opened date | Trash or external disk |
 
 ## Group C: in an app's own settings
@@ -52,7 +52,14 @@ Name the search roots explicitly. Never `find ~` over the whole home on a large 
 ## Why "Documents" is huge on macOS
 
 System Settings › Storage shows "Documents" as every user file that fits no other category: models, VM disks, caches,
-app support folders. The `~/Documents` folder itself is often tiny. Measure the home folder's top level instead.
+app support folders, and hidden folders such as `~/.ollama`, `~/.colima` or an app's VM bundle. The `~/Documents`
+folder itself is often tiny. Measure the home folder's top level, hidden folders included, and show the user those
+names instead of saying "Documents is heavy".
+
+## Keep, never clean
+
+Agent threads and sessions (active or archived), their git worktrees and merged git branches. They are the record of
+why things were done. If they are in the way, archive them; report their size only.
 
 ## RAM and CPU
 
