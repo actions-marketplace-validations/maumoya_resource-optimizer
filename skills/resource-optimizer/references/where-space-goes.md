@@ -45,7 +45,8 @@ pushed repos. Package caches gave about 7 GiB. Start with the Trash size and the
 
 Rank apps unused for 90+ days, largest first. Action: the app's own uninstaller if it has one, else Storage › Applications ›
 Delete (moves it out the official way). Data the app made (iMovie libraries, GarageBand projects) is user data: Group B,
-archive first. Never offer system apps (Safari, Mail) or apps with a running login item or helper.
+archive first. Paid apps: deleting the app does not cancel the plan; tell the user to cancel it in their account.
+Never offer system apps (Safari, Mail) or apps with a running login item or helper.
 
 ## Why "System Data" is huge on macOS
 
