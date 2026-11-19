@@ -41,6 +41,63 @@ Sizes vary. Measure each with `du -sh PATH`, one explicit path at a time.
 **Report only, never offered:** Xcode Archives (they hold the dSYMs needed to read crash reports), iOS device backups in
 `~/Library/Application Support/MobileSync/Backup`, Mail Downloads, and Chromium `*.code_sign_clone` folders.
 
+## Build output inside git worktrees
+
+Build folders inside agent git worktrees (for example a Swift `.build` or a `node_modules` in each worktree) can hold most of a disk: in a
+real run 42 of 46 GB. Offer each build folder (🟡, group A) only when it was untouched for 7+ days and every check
+passes, one folder at a time:
+
+| Check | Command (read-only) | Pass when |
+|---|---|---|
+| Not tracked | `git -C WORKTREE ls-files DIR` | prints nothing |
+| Ignored | `git -C WORKTREE check-ignore -q DIR` | exit 0 |
+| Marked as cache | `ls DIR/CACHEDIR.TAG` | file exists |
+| Not open | `lsof +D DIR` | prints nothing |
+| No process uses the worktree | `pgrep -fl WORKTREE` | prints nothing |
+| Nothing points at it | search `~/Library/LaunchAgents` and the repo's build scripts for the path | no match |
+| Running app not built from it | the app's executable path (`ps -o comm= -p PID`) | outside DIR |
+
+Then check git in that worktree: unpushed commits (`git -C WORKTREE rev-list @{u}..HEAD`, and the branch exists on
+the remote) and uncommitted files (`git -C WORKTREE status --porcelain`). Report uncommitted files as ⚠️ "stays
+untouched": the command only moves the build folder. Keep the worktree itself (SKILL.md rule 8).
+
+## Local AI models: prove each one is unused
+
+Before offering a model, every check must pass:
+
+- not in any model pin or lock file the project keeps;
+- not in the app's live model list (its own status command);
+- no runtime code calls it (search code, leave out tests, evals and docs); a catalog or size-table mention is
+  display only;
+- no LaunchAgent and no open pull request names it;
+- `ollama ps` shows it is not loaded.
+
+Embedding models count as in use when search runs on them. Before the command, show one table:
+`Model | What the app uses it for | Keep or remove`. Valid reasons to remove: a trial that was never adopted, only in
+old eval results or a catalog, or bigger than the machine's memory allows while a smaller pinned model does the job.
+Then one block of `ollama rm NAME` lines the user runs. Model blobs are not APFS clones, so `ollama list` sizes match
+the `df` gain (a real run: 4 models, 24.9 GB listed, free space 55 → 80 GB).
+If the app's own status command crashes during a check, do not block on it: note it, and propose fixing it
+separately.
+
+## Docker on Colima or Lima: space does not come back by itself
+
+- **The VM disk does not shrink after `docker image rm`.** The VM mounts its data disk without `discard`, so freed
+  blocks stay inside `~/.colima/_lima/_disks/colima` and `df -h /` on the Mac shows no gain. With the VM running,
+  the user runs `colima ssh -- sudo fstrim -v /mnt/lima-colima` (the `sudo` runs inside the VM, not on the Mac);
+  then re-measure. In a real run this freed 9.5 GiB.
+- **A profile's data disk stays after `colima delete`.** Removing a profile and its data needs
+  `colima delete -f --data PROFILE`, one profile per line. Only offer it for a profile the user does not use.
+- **Images with no tag (`<none>`)** fail with "No such image" when removed by name. Remove them by image ID:
+  `docker images --filter dangling=true` lists the IDs, then `docker image rm ID`, one ID per line.
+
+## Measure before you offer
+
+- **`du` overcounts on APFS.** In a real run `du` said 13.6 GB and the Trash gave back 9 GB (clones and hard
+  links). Say "about" before the command and report only the `df -h /` gain after it.
+- **An empty cache gets no step.** Measure each cache first (`pip cache info`, `du -sh PATH`); in a real run the pip
+  cache was already 0 bytes. Drop a cache at 0 bytes from the table instead of keeping a purge step pending.
+
 ## What freed the most in a real run
 
 16 GB Mac mini, 29 → 92 GiB free in four user-run rounds: emptying the Trash (+23 GiB, nothing is freed until then),
@@ -71,17 +128,30 @@ Never offer system apps (Safari, Mail) or apps with a running login item or help
 
 ## Why "System Data" is huge on macOS
 
+System Data is mostly hidden dot folders and app data, not macOS itself (130 GB in a real run: models 58 GB, an
+app's own data 25 GB, Docker 23 GB, an app VM 15 GB, simulators 8.6 GB). Measure read-only first:
+`du -xsh ~/.ollama ~/.colima ~/.cache ~/.npm ~/Library/Caches ~/Library/Developer "$HOME/Library/Application Support"`,
+then `tmutil listlocalsnapshots /` and `du -sh /private/var/folders`. An app's own data folder is hands off.
+
 | Item | Check (read-only) | Action |
 |---|---|---|
 | Simulator runtimes (often 8 GB each) | `xcrun simctl runtime list -v` (size, last used) | keep the newest one in use; `xcrun simctl runtime delete ID` for the rest |
 | Temp and cache (`/private/var/folders`) | `du -sh "$(getconf DARWIN_USER_TEMP_DIR)"` | a restart clears most of it; never Trash it by hand while apps run |
 | Time Machine local snapshots | `tmutil listlocalsnapshots /` | macOS thins them when space is low |
-| App VM bundles (Claude, Docker) | `du -sh` on the app's support folder | keep while the app is used |
+| App VM bundles (Claude, Docker) | `du -sh` on the app's support folder; `stat -f '%Sm' PATH` for last change | keep while the app is used; see "App VMs in active use" below |
 | Purgeable space | `diskutil info /` Container Free Space | Settings counts it as used; it frees by itself |
 
 ## Group C: in an app's own settings
 
 Messages and WhatsApp attachments, iCloud "Optimize Mac Storage", photo libraries, mail downloads, a pending OS update.
+
+### App VMs in active use
+
+Before offering an app VM bundle (for example the Claude app's
+`~/Library/Application Support/Claude/vm_bundles/claudevm.bundle`), check its last change with
+`stat -f '%Sm' PATH` (macOS) or `stat -c '%y' PATH` (Linux). Changed in the last 7 days: the row reads
+"Need it? yes, in active use" and is not offered at all. In a real run the Claude app's VM was offered although it
+had been used that same day.
 
 ## Extra read-only checks
 
