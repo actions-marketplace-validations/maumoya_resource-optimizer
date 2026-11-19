@@ -30,7 +30,12 @@ safely. You measure; the user deletes. Every run ends with a measured before/aft
    them plainly (🟡) for projects untouched for 6+ months, with the rebuild command. Check git only for source files.
 8. **Keep the history.** Never suggest removing agent threads or sessions (active or archived), their git worktrees,
    or merged git branches: they record why things were done. Archive leftovers, don't delete them.
+   Build output inside a worktree (`.build`, `node_modules`) is not the worktree: offer it only after the checks in
+   `references/where-space-goes.md` ("Build output inside git worktrees") all pass.
 9. **Still needed but big** (VM disks, models in use): suggest an external disk, never deletion.
+10. **Measure the gain where it lands.** Colima/Lima VM disks need `fstrim` inside the VM before the Mac sees freed
+    Docker space; untagged (`<none>`) images go by ID; an app VM changed in the last 7 days is "yes, in active use"
+    and never offered. Details in `references/where-space-goes.md`.
 
 ## Steps
 
@@ -44,10 +49,11 @@ safely. You measure; the user deletes. Every run ends with a measured before/aft
    checked fact ("unchanged 240 days", "no app has this bundle ID"). Before offering a cache, check its tool is not
    running (`pgrep -fl NAME`); if it is, list it with "in use, later". Sizes from `du` overcount APFS clones and hard
    links: say "about", and trust only the `df` gain after each group. "Need it?" is `yes`, `no` or
-   `you decide`, with a reason in up to 6 words. Risk: 🔵 regenerates by itself, 🟡 costs time to rebuild or re-download,
+   `you decide`, with a reason in up to 6 words. Measure every cache first; one at 0 bytes gets no row. Risk: 🔵 regenerates by itself, 🟡 costs time to rebuild or re-download,
    🔴 your data (never offered for deletion, only archive). Caches that are slow or big to rebuild (Playwright browsers,
    an active project's DerivedData, model downloads) are 🟡 and go to group B, not A. Use `references/where-space-goes.md` for the usual suspects and their clean commands.
-   For local AI models, check whether any code or config still names a model before calling it unused.
+   For local AI models, run every check in `references/where-space-goes.md` ("Local AI models") and show the
+   per-model keep-or-remove table before any `ollama rm`.
 4. **Group.** A = regenerable (caches, simulators, build output): safe. B = you decide (models, old projects, big downloads,
    VMs). C = done in an app's own settings. Plus "don't touch" with the reason.
 5. **One group at a time.** Show the group, its size and why it is safe, then one fenced command block. Wait for the user
